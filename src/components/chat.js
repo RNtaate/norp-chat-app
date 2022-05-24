@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { Form, Button } from "react-bootstrap";
+import MessageCard from './MessageCard';
+
+const getCurrentTime = () => {
+  return `${new Date(Date.now()).getHours()} : ${new Date(Date.now()).getMinutes()}`
+}
+
 
 const Chat = ({ socket }) => {
   const [message, setMessage] = useState("");
@@ -22,10 +28,7 @@ const Chat = ({ socket }) => {
     const connectionMade = false;
     try {
       if(username && room) {
-        await socket.emit("join_room", userDetails)
-        socket.on("user_joined_message", (message) => {
-          setMessageList([...messageList, message])
-        })
+        await socket.emit("join_room", {...userDetails, time: getCurrentTime()})
         setShowMessagesDiv(true);
         e.target.reset();
       } else {
@@ -48,7 +51,7 @@ const Chat = ({ socket }) => {
     e.preventDefault();
     try {
       if (message !== "") {
-        await socket.emit("send_message", {username: userDetails.username, message});
+        await socket.emit("send_message", {username: userDetails.username, message, time: getCurrentTime()});
         console.log("Your message has been sent successfully");
         e.target.reset();
       }
@@ -57,12 +60,13 @@ const Chat = ({ socket }) => {
     }
   }
 
-  socket.on("receive_message", (messageData) => {
-    setMessageList([...messageList, messageData.message]);
+
+  socket.on("user_joined_message", (messageData) => {
+    setMessageList([...messageList, messageData])
   })
 
-  socket.on("user_joined", (joinMessage) => {
-    setMessageList([...messageList, joinMessage]);
+  socket.on("receive_message", (messageData) => {
+    setMessageList([...messageList, messageData]);
   })
 
   return (
@@ -79,11 +83,11 @@ const Chat = ({ socket }) => {
         </div> :
         
         <div className='chat-form-div d-flex flex-column'>
-          <div className='display-messages-div overflow-auto p-2 mb-2'>
+          <div className='display-messages-div bg-light overflow-auto p-2 mb-2'>
             {messageList.length > 0 ?
-              messageList.map((message, index) => {
+              messageList.map((messageObj, index) => {
                 return (
-                  <small className='d-block' key={index}>{message}</small>
+                  <MessageCard key={index} messageObj = {messageObj} username={userDetails.username}/>
                 )
               }) : ""
             }
