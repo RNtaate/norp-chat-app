@@ -10,22 +10,7 @@ const Chat = ({ socket }) => {
     room: null
   })
 
-  const handleOnChange = (e) => {
-    setMessage(e.target.value);
-  }
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      if (message !== "") {
-        await socket.emit("send_message", message);
-        console.log("Your message has been sent successfully");
-        e.target.reset();
-      }
-    } catch (err) {
-      console.error(err.message);
-    }
-  }
+ // Entering a room 
 
   const userDetailsChange = (e) => {
     setUserDetails({...userDetails, [e.target.name]: e.target.value})
@@ -51,8 +36,29 @@ const Chat = ({ socket }) => {
     }
   }
 
-  socket.on("receive_message", (message) => {
-    setMessageList([...messageList, message]);
+
+
+ // Sending a message
+
+  const handleOnChange = (e) => {
+    setMessage(e.target.value);
+  }
+
+  const handleSendMessage = async (e) => {
+    e.preventDefault();
+    try {
+      if (message !== "") {
+        await socket.emit("send_message", {username: userDetails.username, message});
+        console.log("Your message has been sent successfully");
+        e.target.reset();
+      }
+    } catch (err) {
+      console.error(err.message);
+    }
+  }
+
+  socket.on("receive_message", (messageData) => {
+    setMessageList([...messageList, messageData.message]);
   })
 
   socket.on("user_joined", (joinMessage) => {
@@ -82,7 +88,7 @@ const Chat = ({ socket }) => {
               }) : ""
             }
           </div>
-          <Form onSubmit={handleSubmit} className="message-form w-100 d-flex align-items-center">
+          <Form onSubmit={handleSendMessage} className="message-form w-100 d-flex align-items-center">
             <input type="text" autoComplete='false' placeholder='Hey...' className="w-100 p-2 chat-message-input" onChange={handleOnChange}/>
             <Button variant="dark" type="submit">Send</Button>
           </Form>
