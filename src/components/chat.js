@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Form, Button } from "react-bootstrap";
 import MessageCard from './MessageCard';
+import ScrollToBottom from 'react-scroll-to-bottom';
 
 const getCurrentTime = () => {
   return `${new Date(Date.now()).getHours()} : ${new Date(Date.now()).getMinutes()}`
@@ -83,15 +84,15 @@ const Chat = ({ socket }) => {
         </div> :
         
         <div className='chat-form-div d-flex flex-column'>
-          <div className='display-messages-div bg-light overflow-auto p-2 mb-2'>
-            {messageList.length > 0 ?
-              messageList.map((messageObj, index) => {
-                return (
-                  <MessageCard key={index} messageObj = {messageObj} username={userDetails.username}/>
-                )
-              }) : ""
-            }
-          </div>
+            <ScrollToBottom scrollViewClassName='display-messages-div bg-light overflow-auto p-2 mb-2'>
+              {messageList.length > 0 ?
+                messageList.map((messageObj, index) => {
+                  return (
+                    <MessageCard key={index} messageObj = {messageObj} username={userDetails.username}/>
+                  )
+                }) : ""
+              }
+            </ScrollToBottom>
           <Form onSubmit={handleSendMessage} className="message-form w-100 d-flex align-items-center">
             <input type="text" autoComplete='false' placeholder='Hey...' className="w-100 p-2 chat-message-input" onChange={handleOnChange}/>
             <Button variant="dark" type="submit">Send</Button>
