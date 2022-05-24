@@ -17,8 +17,19 @@
   max-height: 90vh;
   min-width: 320px;
   max-width: 450px;
-  border: 1px solid lightgray;
+  border: 1px solid #eee;
   border-radius: 3px;
+}
+
+.chat-heading {
+  font-size: 20px;
+}
+
+.live-div {
+  height: 10px;
+  width: 10px;
+  background-color: #00b83D;
+  border-radius: 50%;
 }
 
 .chat-wrapper-div,
@@ -52,8 +63,9 @@
 .chat-message-input {
   outline: none;
   border: 1px solid lightgray;
-  border-radius: 5px;
-  color: #577;
+  border-radius: 2em;
+  color: #555;
+  font-size: 13px;
 }
 
 .chat-message-input::placeholder {
