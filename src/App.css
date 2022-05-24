@@ -37,6 +37,7 @@
   outline: none;
   border: 1px solid lightgray;
   border-radius: 5px;
+  color: #577;
 }
 
 .chat-message-input::placeholder {
