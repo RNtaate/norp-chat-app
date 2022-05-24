@@ -8,7 +8,7 @@ const getCurrentTime = () => {
 }
 
 
-const Chat = ({ socket }) => {
+const Chat = ({ socket, setCurrentUsername }) => {
   const [message, setMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
   const [showMessagesDiv, setShowMessagesDiv] = useState(false);
@@ -30,6 +30,7 @@ const Chat = ({ socket }) => {
     try {
       if(username && room) {
         await socket.emit("join_room", {...userDetails, time: getCurrentTime()})
+        setCurrentUsername(username)
         setShowMessagesDiv(true);
         e.target.reset();
       } else {
@@ -75,7 +76,7 @@ const Chat = ({ socket }) => {
 
       {!showMessagesDiv ?
         <div className="join-chat-div">
-          <h5>Join A Chat Room</h5>
+          <h6>Join A Chat Room</h6>
           <Form onSubmit={handleJoinRoom}>
             <input type="text" autoComplete='false' placeholder='User name' name="username" onChange={userDetailsChange} className='w-100 mb-3 p-2 chat-message-input' />
             <input type="text" autoComplete='false' placeholder='Chat Room Number' name='room' onChange={userDetailsChange} className='w-100 mb-3 p-2 chat-message-input' />
@@ -94,8 +95,8 @@ const Chat = ({ socket }) => {
               }
             </ScrollToBottom>
           <Form onSubmit={handleSendMessage} className="message-form w-100 d-flex align-items-center">
-            <input type="text" autoComplete='false' placeholder='Hey...' className="w-100 p-2 chat-message-input" onChange={handleOnChange}/>
-            <Button variant="dark" type="submit">Send</Button>
+            <input type="text" autoComplete='false' placeholder='Hey...' className="w-100 p-2 me-1 chat-message-input" onChange={handleOnChange}/>
+            <Button variant="secondary" type="submit" className='btn-sm d-flex align-items-center'><i class="fa fa-paper-plane me-1" aria-hidden="true"></i> Send</Button>
           </Form>
         </div>
       }
