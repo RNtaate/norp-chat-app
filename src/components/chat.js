@@ -1,6 +1,7 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
+import { Form, Button } from "react-bootstrap";
 
-const Chat = ({socket}) => {
+const Chat = ({ socket }) => {
   const [message, setMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
 
@@ -11,14 +12,14 @@ const Chat = ({socket}) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if(message !== "") {
+      if (message !== "") {
         await socket.emit("send_message", message);
         console.log("Your message has been sent successfully");
         e.target.reset();
       }
-    }catch(err) {
+    } catch (err) {
       console.error(err.message);
-    } 
+    }
   }
 
   socket.on("receive_message", (message) => {
@@ -30,21 +31,21 @@ const Chat = ({socket}) => {
   })
 
   return (
-    <div className='chat-wrapper-div'>
-      <div className='chat-form-div'>
-        <div className='dispaly-messages-div'>
-          {messageList.length > 0 ? 
+    <div className='chat-wrapper-div w-100 d-flex flex-column p-2'>
+      <div className='chat-form-div d-flex flex-column'>
+        <div className='display-messages-div overflow-auto p-2 mb-2'>
+          {messageList.length > 0 ?
             messageList.map((message, index) => {
               return (
-                <p key={index}>{message}</p>
+                <small className='d-block' key={index}>{message}</small>
               )
             }) : ""
           }
         </div>
-        <form onSubmit={handleSubmit}>
-          <input type="text" placeholder="Hey..." onChange = {handleOnChange}></input>
-          <button type="submit">Send</button>
-        </form>
+        <Form onSubmit={handleSubmit} className="message-form w-100 d-flex align-items-center">
+          <input type="text" autoComplete='false' placeholder='Hey...' className="w-100 p-2 chat-message-input" onChange={handleOnChange}></input>
+          <Button variant="dark" type="submit">Send</Button>
+        </Form>
       </div>
     </div>
   )
