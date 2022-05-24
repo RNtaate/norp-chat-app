@@ -9,7 +9,7 @@ function App() {
   return (
     <div className="App">
       <h1>NORP CHAT APP</h1>
-      <Chat />
+      <Chat socket={socket}/>
     </div>
   );
 }
