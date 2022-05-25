@@ -23,6 +23,10 @@
 
 .chat-heading {
   font-size: 20px;
+  text-shadow: -1px -1px 0px #333,
+    2px 2px 0px #333,
+    3px 3px 0px black;
+  letter-spacing: 5px;
 }
 
 .live-div {
