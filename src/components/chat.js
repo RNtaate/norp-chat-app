@@ -17,6 +17,8 @@ const Chat = ({ socket, setCurrentUsername }) => {
     room: null
   })
 
+  const chatRooms = ["JavaScript", "Python", "Ruby on Rails", "Java"]
+
  // Entering a room 
 
   const userDetailsChange = (e) => {
@@ -77,10 +79,18 @@ const Chat = ({ socket, setCurrentUsername }) => {
 
       {!showMessagesDiv ?
         <div className="join-chat-div">
-          <h6>Join A Chat Room</h6>
+          <h6 className='ps-2'>Join A Chat Room</h6>
           <Form onSubmit={handleJoinRoom}>
-            <input type="text" autoComplete='false' placeholder='User name' name="username" onChange={userDetailsChange} className='w-100 mb-3 p-2 chat-message-input' />
-            <input type="text" autoComplete='false' placeholder='Chat Room Number' name='room' onChange={userDetailsChange} className='w-100 mb-3 p-2 chat-message-input' />
+            <input type="text" autoComplete='false' placeholder='Enter your username' name="username" onChange={userDetailsChange} className='w-100 mb-3 p-2 chat-message-input' />
+
+            <select className="chat-rooms-select w-100 mb-3 p-2 chat-message-input" name='room' onChange={userDetailsChange}>
+              <option value="">Select a chat room</option>
+              {chatRooms.map( (room, index) => {
+                return (
+                  <option key={index} value={room}>{ room }</option>
+                )
+              })}
+            </select>
             <Button type="submit" variant="secondary" className='w-100'>Join Chat</Button>
           </Form>
         </div> :
@@ -97,7 +107,7 @@ const Chat = ({ socket, setCurrentUsername }) => {
             </ScrollToBottom>
           <Form onSubmit={handleSendMessage} className="message-form w-100 d-flex align-items-center">
             <input type="text" autoComplete='false' placeholder='Hey...' className="w-100 p-2 me-1 chat-message-input" onChange={handleOnChange}/>
-            <Button variant="secondary" type="submit" className='btn-sm d-flex align-items-center'><i class="fa fa-paper-plane me-1" aria-hidden="true"></i> Send</Button>
+            <Button variant="secondary" type="submit" className='btn-sm d-flex align-items-center'><i className="fa fa-paper-plane me-1" aria-hidden="true"></i> Send</Button>
           </Form>
         </div>
       }
