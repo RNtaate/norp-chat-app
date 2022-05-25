@@ -51,10 +51,12 @@ const Chat = ({ socket, setCurrentUsername }) => {
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
+    let messageData = {username: userDetails.username, message, room: userDetails.room, time: getCurrentTime()}
     try {
       if (message !== "") {
-        await socket.emit("send_message", {username: userDetails.username, message, time: getCurrentTime()});
+        await socket.emit("send_message", messageData );
         console.log("Your message has been sent successfully");
+        setMessageList([...messageList, messageData])
         e.target.reset();
       }
     } catch (err) {

@@ -13,7 +13,7 @@ function App() {
       <section className='chat-app-wrapper-section d-flex flex-column align-items-center justify-content-center w-100 overflow-hidden'>
 
         <header className='bg-secondary w-100 d-flex justify-content-between align-items-center px-2'>
-          <h1 className="chat-heading text-light py-2 m-0">NORP CHAT APP</h1>
+          <h1 className="chat-heading text-light py-2 m-0">Norp~Chat~App</h1>
           {currentUsername && 
             <span className='text-light d-flex align-items-center'>
               <small className='me-2'>{currentUsername}</small>
