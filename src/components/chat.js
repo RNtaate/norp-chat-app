@@ -56,7 +56,6 @@ const Chat = ({ socket, setCurrentUsername }) => {
       if (message !== "") {
         await socket.emit("send_message", messageData );
         console.log("Your message has been sent successfully");
-        setMessageList([...messageList, messageData])
         e.target.reset();
       }
     } catch (err) {
