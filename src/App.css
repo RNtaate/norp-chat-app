@@ -1,38 +1,77 @@
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box; 
+  margin: 0;
+  padding: 0;
+}
+
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  max-height: 100vh;
 }
 
-.App-link {
-  color: #61dafb;
+.chat-app-wrapper-section {
+  max-height: 90vh;
+  min-width: 320px;
+  max-width: 450px;
+  border: 1px solid #eee;
+  border-radius: 3px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.chat-heading {
+  font-size: 20px;
+  text-shadow: -1px -1px 0px #333,
+    2px 2px 0px #333,
+    3px 3px 0px black;
+  letter-spacing: 5px;
+}
+
+.live-div {
+  height: 10px;
+  width: 10px;
+  background-color: #00b83D;
+  border-radius: 50%;
+}
+
+.chat-wrapper-div,
+.chat-form-div,
+.display-messages-div {
+  flex: 1;
+}
+
+.display-messages-div {
+  min-height: 50vh;
+  max-height: 50vh;
+  box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.1) inset;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.message-details-p {
+  border-radius: 20px;
+  box-shadow: 0 0 25px 3px rgba(0, 0, 0, 0.2);
+  font-size: 13px;
+}
+
+.message-meta-div {
+  font-size: 11px;
+}
+
+.username-span {
+  font-weight: bold;
+}
+
+.chat-message-input {
+  outline: none;
+  border: 1px solid lightgray;
+  border-radius: 2em;
+  color: #555;
+  font-size: 13px;
+}
+
+.chat-message-input::placeholder {
+  color: #aaa;
 }
