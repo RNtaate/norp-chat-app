@@ -4,7 +4,7 @@ import Chat from "./components/chat";
 import ChatForm from './components/chatForm';
 import { useState } from "react"
 
-const socket = io("http://192.168.1.191:3001");
+const socket = io("http://localhost:3001");
 
 function App() {
   const [currentUsername, setCurrentUsername] = useState("");
