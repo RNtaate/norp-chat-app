@@ -11,14 +11,25 @@
 .App {
   min-height: 100vh;
   max-height: 100vh;
+  background-color: #133;
 }
 
 .chat-app-wrapper-section {
-  max-height: 90vh;
+  max-height: 100vh;
+  min-height: 100vh;
   min-width: 320px;
-  max-width: 450px;
-  border: 1px solid #eee;
+  max-width: 500px;
   border-radius: 3px;
+  box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.1) inset;
+}
+
+header,
+.message-form {
+  box-shadow: 0 0 10px 10px rgba(0, 0, 0, 0.5);
+}
+
+header {
+  z-index: 4;
 }
 
 .chat-heading {
@@ -36,24 +47,19 @@
   border-radius: 50%;
 }
 
-.chat-wrapper-div,
-.chat-form-div,
 .display-messages-div {
-  flex: 1;
-}
-
-.display-messages-div {
-  min-height: 50vh;
-  max-height: 50vh;
-  box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.1) inset;
+  height: 100%;
+  min-height: 100vh;
+  max-height: 100vh;
   overflow-y: scroll;
   overflow-x: hidden;
+  padding: 70px 0 40px 0;
 }
 
 .message-details-p {
   border-radius: 20px;
-  box-shadow: 0 0 25px 3px rgba(0, 0, 0, 0.2);
-  font-size: 13px;
+  box-shadow: 0 0 25px 10px rgba(0, 0, 0, 0.5);
+  font-size: 15px;
 }
 
 .message-meta-div {
@@ -69,9 +75,13 @@
   border: 1px solid lightgray;
   border-radius: 2em;
   color: #555;
-  font-size: 13px;
+  font-size: 15px;
 }
 
 .chat-message-input::placeholder {
   color: #aaa;
+}
+
+.message-form {
+  background-color: #133;
 }
