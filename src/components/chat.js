@@ -2,20 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { Form, Button } from "react-bootstrap";
 import MessageCard from './MessageCard';
 import ScrollToBottom from 'react-scroll-to-bottom';
-
-const getCurrentTime = () => {
-  return `${new Date(Date.now()).getHours()} : ${new Date(Date.now()).getMinutes()}`
-}
+import getCurrentTime from '../HelperMethods';
 
 
-const Chat = ({ socket, setCurrentUsername }) => {
-  const [message, setMessage] = useState("");
-  const [messageList, setMessageList] = useState([]);
-  const [showMessagesDiv, setShowMessagesDiv] = useState(false);
-  const [userDetails, setUserDetails] = useState({
-    username: null, 
-    room: null
-  })
+const Chat = ({ socket, setCurrentUsername, messageList, setMessageList, userDetails, setUserDetails, showMessagesDiv, setShowMessagesDiv }) => {
+  // const [showMessagesDiv, setShowMessagesDiv] = useState(false);
 
   const chatRooms = ["JavaScript", "Python", "Ruby on Rails", "Java"]
 
@@ -47,24 +38,6 @@ const Chat = ({ socket, setCurrentUsername }) => {
 
  // Sending a message
 
-  const handleOnChange = (e) => {
-    setMessage(e.target.value);
-  }
-
-  const handleSendMessage = async (e) => {
-    e.preventDefault();
-    let messageData = {username: userDetails.username, message, room: userDetails.room, time: getCurrentTime()}
-    try {
-      if (message !== "") {
-        await socket.emit("send_message", messageData );
-        console.log("Your message has been sent successfully");
-        e.target.reset();
-      }
-    } catch (err) {
-      console.error(err.message);
-    }
-  }
-
 
   socket.on("user_joined_message", (messageData) => {
     setMessageList([...messageList, messageData])
@@ -75,11 +48,11 @@ const Chat = ({ socket, setCurrentUsername }) => {
   })
 
   return (
-    <div className='chat-wrapper-div w-100 d-flex flex-column p-2'>
+    <div className='chat-wrapper-div w-100 d-flex flex-column'>
 
       {!showMessagesDiv ?
-        <div className="join-chat-div">
-          <h6 className='ps-2'>Join A Chat Room</h6>
+        <div className="join-chat-div px-4">
+          <h6 className='ps-2 text-white'>Join A Chat Room</h6>
           <Form onSubmit={handleJoinRoom}>
             <input type="text" autoComplete='false' placeholder='Enter your username' name="username" onChange={userDetailsChange} className='w-100 mb-3 p-2 chat-message-input' />
 
@@ -96,7 +69,7 @@ const Chat = ({ socket, setCurrentUsername }) => {
         </div> :
         
         <div className='chat-form-div d-flex flex-column'>
-            <ScrollToBottom scrollViewClassName='display-messages-div bg-light overflow-auto p-2 mb-2'>
+            <ScrollToBottom scrollViewClassName='display-messages-div  overflow-auto px-3 mb-2'>
               {messageList.length > 0 ?
                 messageList.map((messageObj, index) => {
                   return (
@@ -105,10 +78,6 @@ const Chat = ({ socket, setCurrentUsername }) => {
                 }) : ""
               }
             </ScrollToBottom>
-          <Form onSubmit={handleSendMessage} className="message-form w-100 d-flex align-items-center">
-            <input type="text" autoComplete='false' placeholder='Hey...' className="w-100 p-2 me-1 chat-message-input" onChange={handleOnChange}/>
-            <Button variant="secondary" type="submit" className='btn-sm d-flex align-items-center'><i className="fa fa-paper-plane me-1" aria-hidden="true"></i> Send</Button>
-          </Form>
         </div>
       }
     </div>
