@@ -11,7 +11,6 @@
 .App {
   min-height: 100vh;
   max-height: 100vh;
-  background-color: #133;
 }
 
 .chat-app-wrapper-section {
@@ -25,7 +24,7 @@
 
 header,
 .message-form {
-  box-shadow: 0 0 10px 10px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.2);
 }
 
 header {
@@ -57,8 +56,7 @@ header {
 }
 
 .message-details-p {
-  border-radius: 20px;
-  box-shadow: 0 0 25px 10px rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
   font-size: 15px;
 }
 
@@ -83,5 +81,5 @@ header {
 }
 
 .message-form {
-  background-color: #133;
+  background-color: #fff;
 }
