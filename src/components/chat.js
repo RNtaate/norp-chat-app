@@ -6,7 +6,6 @@ import getCurrentTime from '../HelperMethods';
 
 
 const Chat = ({ socket, setCurrentUsername, messageList, setMessageList, userDetails, setUserDetails, showMessagesDiv, setShowMessagesDiv }) => {
-  // const [showMessagesDiv, setShowMessagesDiv] = useState(false);
 
   const chatRooms = ["JavaScript", "Python", "Ruby on Rails", "Java"]
 
@@ -44,6 +43,10 @@ const Chat = ({ socket, setCurrentUsername, messageList, setMessageList, userDet
   })
 
   socket.on("receive_message", (messageData) => {
+    setMessageList([...messageList, messageData]);
+  })
+
+  socket.on("welcome_message", (messageData) => {
     setMessageList([...messageList, messageData]);
   })
 
