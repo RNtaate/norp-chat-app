@@ -1,5 +1,6 @@
+import moment from 'moment';
 const getCurrentTime = () => {
-  return `${new Date(Date.now()).getHours()} : ${new Date(Date.now()).getMinutes()}`
+  return moment().format('LT');
 }
 
 export default getCurrentTime;
