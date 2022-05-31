@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import {Form, Button} from 'react-bootstrap'
 import getCurrentTime from '../HelperMethods';
 
-const ChatForm = ({socket, messageList, setMessageList, userDetails}) => {
+const ChatForm = ({socket, userDetails}) => {
   const [message, setMessage] = useState("");
 
   const handleOnChange = (e) => {
@@ -22,10 +22,6 @@ const ChatForm = ({socket, messageList, setMessageList, userDetails}) => {
       console.error(err.message);
     }
   }
-
-  socket.on("receive_message", (messageData) => {
-    setMessageList([...messageList, messageData]);
-  })
 
   return (
     <Form onSubmit={handleSendMessage} className="message-form w-100 d-flex align-items-center position-fixed left-0 bottom-0 px-2 py-2">
