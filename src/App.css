@@ -42,6 +42,16 @@ header {
   letter-spacing: 5px;
 }
 
+.nav-icon-div {
+  font-size: 20px;
+  cursor: pointer;
+  color: #fff
+}
+
+.nav-icon-div > span:hover {
+  color: #444;
+}
+
 .live-div {
   height: 10px;
   width: 10px;
@@ -55,7 +65,7 @@ header {
   max-height: 100vh;
   overflow-y: scroll;
   overflow-x: hidden;
-  padding: 70px 0 40px 0;
+  padding: 90px 0 40px 0;
 }
 
 .message-details-p {
