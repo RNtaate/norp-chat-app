@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button } from 'react-bootstrap'
 
-const NavBar = ({ currentUsername, handleShow }) => {
+const NavBar = ({ currentUsername, handleShow, notificationMessages }) => {
   return (
     <header className='bg-secondary w-100 d-flex flex-column justify-content-between position-fixed top-0'>
       <nav className='d-flex justify-content-between align-items-center w-100 px-2 py-1'>
@@ -12,7 +12,7 @@ const NavBar = ({ currentUsername, handleShow }) => {
 
             <span className='position-relative' data-bs-toggle="tooltip" title='Notifications'>
               <i className="fa fa-envelope" aria-hidden="true"></i>
-              <span class="position-absolute top-0 start-0 translate-middle bg-danger notification-number-div d-flex justify-content-center align-items-center" style={{fontSize: "10px", width: "25px", height: "25px", borderRadius: "50%"}}><b>100</b></span>
+              {notificationMessages.length > 0 && <span className="position-absolute top-0 start-0 translate-middle bg-danger notification-number-div d-flex justify-content-center align-items-center" style={{fontSize: "10px", width: "25px", height: "25px", borderRadius: "50%"}}><b>{notificationMessages.length}</b></span>}
             </span>
           </div>}
       </nav>
