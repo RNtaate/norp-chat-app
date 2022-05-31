@@ -96,7 +96,15 @@ function App() {
           <ListGroup variant="flush">
             {CHATROOMS.map((room, index) => {
               return (
-                <ListGroup.Item key={index} action className="room-list-item" name={room} onClick={handleSettingRoom}>{room}</ListGroup.Item>
+                <ListGroup.Item key={index} action className="room-list-item d-flex justify-content-between align-items-center" name={room} onClick={handleSettingRoom}>
+                  {room}
+                  {((notificationMessages.length > 0) && (notificationMessages.filter(messageData => messageData.room == room).length > 0)) &&
+                    <span className=" bg-danger notification-number-div d-flex justify-content-center align-items-center text-white" style={{ fontSize: "10px", width: "25px", height: "25px", borderRadius: "50%" }}>
+                      <b>
+                        {notificationMessages.filter(messageData => messageData.room == room).length}
+                      </b>
+                    </span>}
+                </ListGroup.Item>
               )
             })}
           </ListGroup>
