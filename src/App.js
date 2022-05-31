@@ -4,7 +4,7 @@ import Chat from "./components/chat";
 import ChatForm from './components/chatForm';
 import { useState } from "react"
 import { Modal, Button } from "react-bootstrap/"
-import {CHATROOMS} from "./HelperMethods";
+import getCurrentTime, {CHATROOMS} from "./HelperMethods";
 
 const socket = io("http://localhost:3001");
 
@@ -29,8 +29,23 @@ function App() {
     setShow(true);
   }
 
+  const handleJoinRoom = async (currentRoom) => {
+    const currentUserDetails = {
+      username: userDetails.username,
+      room: currentRoom
+    };
+    try {
+      await socket.emit("join_room", {...currentUserDetails, time: getCurrentTime()})
+    }catch(err) {
+      console.error("Error! : Couldn't enter room : ", err.message)
+    }
+  }
+
   const handleSettingRoom = (e) => {
     setCurrentRoom(e.target.getAttribute('name'));
+    if(!messageObject[e.target.getAttribute('name')]) {
+      handleJoinRoom(e.target.getAttribute('name'));
+    }
     handleClose();
   }
 
@@ -75,6 +90,7 @@ function App() {
             setMessageList={setMessageList}
             userDetails={userDetails}
             setUserDetails={setUserDetails}
+            currentRoom={currentRoom}
           />
         }
       </section>
