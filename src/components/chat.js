@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Form, Button } from "react-bootstrap";
 import MessageCard from './MessageCard';
 import ScrollToBottom from 'react-scroll-to-bottom';
@@ -17,9 +17,12 @@ const Chat = ({
   messageObject,
   setMessageObject,
   currentRoom,
-  setCurrentRoom
+  setCurrentRoom,
+  notificationMessages,
+  setNotificationMessages
 }) => {
 
+  const roomValue = useRef();
  // Entering a room 
 
   const userDetailsChange = (e) => {
@@ -45,6 +48,10 @@ const Chat = ({
     }
   }
 
+// keep track of changes in the chat room so as to use them in the sending message useEffect hook. since the currentRoom state is empty in the useEffect hook.;
+  useEffect(() => {
+    roomValue.current = currentRoom;
+  }, [currentRoom])
 
 
  // Sending a message
@@ -52,11 +59,14 @@ const Chat = ({
   useEffect(() => {
     socket.on("user_joined_message", (messageData) => {
       setMessageList([...messageList, messageData])
-      console.log(messageList);
-      console.log(messageObject['JavaScript'])
       setMessageObject((obj) => {
         return {...obj, [`${messageData.room}`] : [...obj[`${messageData.room}`], messageData]}
       })
+      if(messageData.room != roomValue.current) {
+        setNotificationMessages((arr) => {
+          return [...arr, messageData];
+        })
+      }
     })
 
     socket.on("receive_message", (messageData) => {
@@ -64,6 +74,11 @@ const Chat = ({
       setMessageObject((obj) => {
         return {...obj, [`${messageData.room}`] : [...obj[`${messageData.room}`], messageData]}
       })
+      if(messageData.room != roomValue.current) {
+        setNotificationMessages((arr) => {
+          return [...arr, messageData];
+        })
+      }
     })
 
     socket.on("welcome_message", (messageData) => {
