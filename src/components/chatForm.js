@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import {Form, Button} from 'react-bootstrap'
 import getCurrentTime from '../HelperMethods';
 
-const ChatForm = ({socket, userDetails}) => {
+const ChatForm = ({socket, userDetails, currentRoom}) => {
   const [message, setMessage] = useState("");
 
   const handleOnChange = (e) => {
@@ -11,7 +11,7 @@ const ChatForm = ({socket, userDetails}) => {
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
-    let messageData = {username: userDetails.username, message, room: userDetails.room, time: getCurrentTime()}
+    let messageData = {username: userDetails.username, message, room: currentRoom, time: getCurrentTime()}
     try {
       if (message !== "") {
         await socket.emit("send_message", messageData );
