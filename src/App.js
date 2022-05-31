@@ -21,6 +21,7 @@ function App() {
 
   const [messageObject, setMessageObject] = useState({})
   const [currentRoom, setCurrentRoom] = useState("");
+  const [notificationMessages, setNotificationMessages] = useState([]);
 
   const handleClose = () => {
     setShow(false);
@@ -47,6 +48,9 @@ function App() {
     if (!messageObject[e.target.getAttribute('name')]) {
       handleJoinRoom(e.target.getAttribute('name'));
     }
+    if (notificationMessages.length > 0) {
+      setNotificationMessages(notificationMessages.filter(messageData => messageData.room != e.target.getAttribute('name')))
+    }
     handleClose();
   }
 
@@ -54,7 +58,7 @@ function App() {
     <main className="App d-flex flex-column align-items-center justify-content-center position-relative">
       <section className='chat-app-wrapper-section d-flex flex-column align-items-center justify-content-center w-100 overflow-hidden'>
 
-        <NavBar currentUsername={currentUsername} handleShow={handleShow}/>
+        <NavBar currentUsername={currentUsername} handleShow={handleShow} notificationMessages={notificationMessages} />
 
         <Chat
           socket={socket}
@@ -69,6 +73,8 @@ function App() {
           setMessageObject={setMessageObject}
           currentRoom={currentRoom}
           setCurrentRoom={setCurrentRoom}
+          notificationMessages={notificationMessages}
+          setNotificationMessages={setNotificationMessages}
         />
         {showMessagesDiv &&
           <ChatForm
