@@ -3,8 +3,8 @@ import { io } from "socket.io-client";
 import Chat from "./components/chat";
 import ChatForm from './components/chatForm';
 import { useState } from "react"
-import { Modal, Button } from "react-bootstrap/"
-import getCurrentTime, {CHATROOMS} from "./HelperMethods";
+import { Modal, Button, ListGroup, ListGroupItem } from "react-bootstrap/"
+import getCurrentTime, { CHATROOMS } from "./HelperMethods";
 
 const socket = io("http://localhost:3001");
 
@@ -35,15 +35,15 @@ function App() {
       room: currentRoom
     };
     try {
-      await socket.emit("join_room", {...currentUserDetails, time: getCurrentTime()})
-    }catch(err) {
+      await socket.emit("join_room", { ...currentUserDetails, time: getCurrentTime() })
+    } catch (err) {
       console.error("Error! : Couldn't enter room : ", err.message)
     }
   }
 
   const handleSettingRoom = (e) => {
     setCurrentRoom(e.target.getAttribute('name'));
-    if(!messageObject[e.target.getAttribute('name')]) {
+    if (!messageObject[e.target.getAttribute('name')]) {
       handleJoinRoom(e.target.getAttribute('name'));
     }
     handleClose();
@@ -57,9 +57,9 @@ function App() {
           <nav className='d-flex justify-content-between align-items-center w-100 px-2'>
             <h1 className="chat-heading text-light py-2 m-0">Norp~Chat~App</h1>
             {currentUsername &&
-            <Button variant="dark" className='btn-sm' onClick={handleShow}>
-              Rooms
-            </Button>}
+              <Button variant="dark" className='btn-sm' onClick={handleShow}>
+                Rooms
+              </Button>}
           </nav>
           {currentUsername &&
             <span className='text-dark px-2 d-flex bg-light align-items-center'>
@@ -99,14 +99,14 @@ function App() {
         <Modal.Header closeButton>
           <Modal.Title>Chat Rooms</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          <ul className="room-list-ul">
+        <Modal.Body className="p-0">
+          <ListGroup variant="flush">
             {CHATROOMS.map((room, index) => {
               return (
-                <li key={index} className="room-list-item" name={room} onClick={handleSettingRoom}>{room}</li>
+                <ListGroup.Item key={index} action className="room-list-item" name={room} onClick={handleSettingRoom}>{room}</ListGroup.Item>
               )
             })}
-          </ul>
+          </ListGroup>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" className='btn-sm' onClick={handleClose}>
