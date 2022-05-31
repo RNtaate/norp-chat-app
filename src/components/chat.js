@@ -68,7 +68,9 @@ const Chat = ({
 
     socket.on("welcome_message", (messageData) => {
       setMessageList([...messageList, messageData]);
-      setMessageObject({...messageObject, [`${messageData.room}`] : [messageData]})
+      setMessageObject((obj) => {
+        return { ...obj, [`${messageData.room}`] : [messageData]}
+      })
     })
   }, [socket])
 
