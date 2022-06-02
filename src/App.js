@@ -1,15 +1,17 @@
+import React, { useState, useEffect } from "react"
 import './App.css';
 import { io } from "socket.io-client";
 import Chat from "./components/chat";
 import ChatForm from './components/chatForm';
-import { useState } from "react"
 import { Modal, Button, ListGroup, ListGroupItem } from "react-bootstrap/"
 import getCurrentTime, { CHATROOMS } from "./HelperMethods";
 import NavBar from './components/NavBar';
+import { Puff } from "react-loader-spinner"
 
 const socket = io("http://192.168.1.191:3001");
 
 function App() {
+  const [connected, setConnected] = useState(false);
   const [currentUsername, setCurrentUsername] = useState("");
   const [messageList, setMessageList] = useState([])
   const [userDetails, setUserDetails] = useState({
@@ -54,37 +56,49 @@ function App() {
     handleClose();
   }
 
+  socket.on("connect", () => {
+    setConnected(true);
+  })
+
+  socket.on("disconnect", () => {
+    setConnected(false)
+  })
+
   return (
     <main className="App d-flex flex-column align-items-center justify-content-center position-relative">
       <section className='chat-app-wrapper-section d-flex flex-column align-items-center justify-content-center w-100 overflow-hidden'>
 
         <NavBar currentUsername={currentUsername} handleShow={handleShow} notificationMessages={notificationMessages} />
 
-        <Chat
-          socket={socket}
-          setCurrentUsername={setCurrentUsername}
-          messageList={messageList}
-          setMessageList={setMessageList}
-          userDetails={userDetails}
-          setUserDetails={setUserDetails}
-          showMessagesDiv={showMessagesDiv}
-          setShowMessagesDiv={setShowMessagesDiv}
-          messageObject={messageObject}
-          setMessageObject={setMessageObject}
-          currentRoom={currentRoom}
-          setCurrentRoom={setCurrentRoom}
-          notificationMessages={notificationMessages}
-          setNotificationMessages={setNotificationMessages}
-        />
-        {showMessagesDiv &&
-          <ChatForm
-            socket={socket}
-            messageList={messageList}
-            setMessageList={setMessageList}
-            userDetails={userDetails}
-            setUserDetails={setUserDetails}
-            currentRoom={currentRoom}
-          />
+        {!connected ?
+          <Puff color="grey" width="100" height="100"/> :
+          <>
+            <Chat
+              socket={socket}
+              setCurrentUsername={setCurrentUsername}
+              messageList={messageList}
+              setMessageList={setMessageList}
+              userDetails={userDetails}
+              setUserDetails={setUserDetails}
+              showMessagesDiv={showMessagesDiv}
+              setShowMessagesDiv={setShowMessagesDiv}
+              messageObject={messageObject}
+              setMessageObject={setMessageObject}
+              currentRoom={currentRoom}
+              setCurrentRoom={setCurrentRoom}
+              notificationMessages={notificationMessages}
+              setNotificationMessages={setNotificationMessages}
+            />
+            {showMessagesDiv &&
+              <ChatForm
+                socket={socket}
+                messageList={messageList}
+                setMessageList={setMessageList}
+                userDetails={userDetails}
+                setUserDetails={setUserDetails}
+                currentRoom={currentRoom}
+              />}
+          </>
         }
       </section>
 
