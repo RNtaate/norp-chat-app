@@ -1,24 +1,28 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Form, Button } from "react-bootstrap";
 import MessageCard from './MessageCard';
 import ScrollToBottom from 'react-scroll-to-bottom';
-
-const getCurrentTime = () => {
-  return `${new Date(Date.now()).getHours()} : ${new Date(Date.now()).getMinutes()}`
-}
+import getCurrentTime, {CHATROOMS} from '../HelperMethods';
 
 
-const Chat = ({ socket, setCurrentUsername }) => {
-  const [message, setMessage] = useState("");
-  const [messageList, setMessageList] = useState([]);
-  const [showMessagesDiv, setShowMessagesDiv] = useState(false);
-  const [userDetails, setUserDetails] = useState({
-    username: null, 
-    room: null
-  })
+const Chat = ({ 
+  socket,
+  setCurrentUsername,
+  messageList,
+  setMessageList,
+  userDetails,
+  setUserDetails,
+  showMessagesDiv,
+  setShowMessagesDiv,
+  messageObject,
+  setMessageObject,
+  currentRoom,
+  setCurrentRoom,
+  notificationMessages,
+  setNotificationMessages
+}) => {
 
-  const chatRooms = ["JavaScript", "Python", "Ruby on Rails", "Java"]
-
+  const roomValue = useRef();
  // Entering a room 
 
   const userDetailsChange = (e) => {
@@ -33,6 +37,7 @@ const Chat = ({ socket, setCurrentUsername }) => {
       if(username && room) {
         await socket.emit("join_room", {...userDetails, time: getCurrentTime()})
         setCurrentUsername(username)
+        setCurrentRoom(room);
         setShowMessagesDiv(true);
         e.target.reset();
       } else {
@@ -43,49 +48,59 @@ const Chat = ({ socket, setCurrentUsername }) => {
     }
   }
 
+// keep track of changes in the chat room so as to use them in the sending message useEffect hook. since the currentRoom state is empty in the useEffect hook.;
+  useEffect(() => {
+    roomValue.current = currentRoom;
+  }, [currentRoom])
 
 
  // Sending a message
 
-  const handleOnChange = (e) => {
-    setMessage(e.target.value);
-  }
-
-  const handleSendMessage = async (e) => {
-    e.preventDefault();
-    let messageData = {username: userDetails.username, message, room: userDetails.room, time: getCurrentTime()}
-    try {
-      if (message !== "") {
-        await socket.emit("send_message", messageData );
-        console.log("Your message has been sent successfully");
-        e.target.reset();
+  useEffect(() => {
+    socket.on("user_joined_message", (messageData) => {
+      setMessageList([...messageList, messageData])
+      setMessageObject((obj) => {
+        return {...obj, [`${messageData.room}`] : [...obj[`${messageData.room}`], messageData]}
+      })
+      if(messageData.room != roomValue.current) {
+        setNotificationMessages((arr) => {
+          return [...arr, messageData];
+        })
       }
-    } catch (err) {
-      console.error(err.message);
-    }
-  }
+    })
 
+    socket.on("receive_message", (messageData) => {
+      setMessageList([...messageList, messageData]);
+      setMessageObject((obj) => {
+        return {...obj, [`${messageData.room}`] : [...obj[`${messageData.room}`], messageData]}
+      })
+      if(messageData.room != roomValue.current) {
+        setNotificationMessages((arr) => {
+          return [...arr, messageData];
+        })
+      }
+    })
 
-  socket.on("user_joined_message", (messageData) => {
-    setMessageList([...messageList, messageData])
-  })
-
-  socket.on("receive_message", (messageData) => {
-    setMessageList([...messageList, messageData]);
-  })
+    socket.on("welcome_message", (messageData) => {
+      setMessageList([...messageList, messageData]);
+      setMessageObject((obj) => {
+        return { ...obj, [`${messageData.room}`] : [messageData]}
+      })
+    })
+  }, [socket])
 
   return (
-    <div className='chat-wrapper-div w-100 d-flex flex-column p-2'>
+    <div className='chat-wrapper-div w-100 d-flex flex-column'>
 
       {!showMessagesDiv ?
-        <div className="join-chat-div">
-          <h6 className='ps-2'>Join A Chat Room</h6>
+        <div className="join-chat-div px-4">
+          <h6 className='ps-2 text-muted'>Join A Chat Room</h6>
           <Form onSubmit={handleJoinRoom}>
             <input type="text" autoComplete='false' placeholder='Enter your username' name="username" onChange={userDetailsChange} className='w-100 mb-3 p-2 chat-message-input' />
 
             <select className="chat-rooms-select w-100 mb-3 p-2 chat-message-input" name='room' onChange={userDetailsChange}>
               <option value="">Select a chat room</option>
-              {chatRooms.map( (room, index) => {
+              {CHATROOMS.map( (room, index) => {
                 return (
                   <option key={index} value={room}>{ room }</option>
                 )
@@ -96,19 +111,15 @@ const Chat = ({ socket, setCurrentUsername }) => {
         </div> :
         
         <div className='chat-form-div d-flex flex-column'>
-            <ScrollToBottom scrollViewClassName='display-messages-div bg-light overflow-auto p-2 mb-2'>
-              {messageList.length > 0 ?
-                messageList.map((messageObj, index) => {
+            <ScrollToBottom scrollViewClassName='display-messages-div  overflow-auto px-3 mb-2'>
+              {messageObject[`${currentRoom}`] ?
+                messageObject[`${currentRoom}`].map((messageObj, index) => {
                   return (
                     <MessageCard key={index} messageObj = {messageObj} username={userDetails.username}/>
                   )
                 }) : ""
               }
             </ScrollToBottom>
-          <Form onSubmit={handleSendMessage} className="message-form w-100 d-flex align-items-center">
-            <input type="text" autoComplete='false' placeholder='Hey...' className="w-100 p-2 me-1 chat-message-input" onChange={handleOnChange}/>
-            <Button variant="secondary" type="submit" className='btn-sm d-flex align-items-center'><i className="fa fa-paper-plane me-1" aria-hidden="true"></i> Send</Button>
-          </Form>
         </div>
       }
     </div>
