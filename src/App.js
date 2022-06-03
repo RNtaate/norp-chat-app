@@ -8,7 +8,7 @@ import getCurrentTime, { CHATROOMS } from "./HelperMethods";
 import NavBar from './components/NavBar';
 import { Puff } from "react-loader-spinner"
 
-const socket = io("http://localhost:3001");
+const socket = io("https://enigmatic-taiga-99914.herokuapp.com/");
 
 function App() {
   const [connected, setConnected] = useState(false);
