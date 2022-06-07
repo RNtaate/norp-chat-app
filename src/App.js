@@ -3,7 +3,7 @@ import './App.css';
 import { io } from "socket.io-client";
 import Chat from "./components/chat";
 import ChatForm from './components/chatForm';
-import { Modal, Button, ListGroup, ListGroupItem } from "react-bootstrap/"
+import { Modal, Button, ListGroup, Tabs, Tab } from "react-bootstrap/"
 import getCurrentTime, { CHATROOMS } from "./HelperMethods";
 import NavBar from './components/NavBar';
 import { Puff } from "react-loader-spinner"
@@ -24,6 +24,8 @@ function App() {
   const [messageObject, setMessageObject] = useState({})
   const [currentRoom, setCurrentRoom] = useState("");
   const [notificationMessages, setNotificationMessages] = useState([]);
+
+  const [usersObject, setUsersObject] = useState(null);
 
   const handleClose = () => {
     setShow(false);
@@ -64,14 +66,23 @@ function App() {
     setConnected(false)
   })
 
+  useEffect(() => {
+    socket.on("users_connected", (data) => {
+      console.log(data);
+      setUsersObject(() => {
+        return data;
+      })
+      console.log("This is the usersObject", usersObject);
+    })
+  }, [socket])
+
   return (
     <main className="App d-flex flex-column align-items-center justify-content-center position-relative">
       <section className='chat-app-wrapper-section d-flex flex-column align-items-center justify-content-center w-100 overflow-hidden'>
-
         <NavBar currentUsername={currentUsername} handleShow={handleShow} notificationMessages={notificationMessages} />
 
         {!connected ?
-          <Puff color="grey" width="100" height="100"/> :
+          <Puff color="grey" width="100" height="100" /> :
           <>
             <Chat
               socket={socket}
@@ -103,26 +114,42 @@ function App() {
       </section>
 
       <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Chat Rooms</Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="p-0">
-          <ListGroup variant="flush">
-            {CHATROOMS.map((room, index) => {
-              return (
-                <ListGroup.Item key={index} action className="room-list-item d-flex justify-content-between align-items-center" name={room} onClick={handleSettingRoom}>
-                  {room}
-                  {((notificationMessages.length > 0) && (notificationMessages.filter(messageData => messageData.room == room).length > 0)) &&
-                    <span className=" bg-danger notification-number-div d-flex justify-content-center align-items-center text-white" style={{ fontSize: "10px", width: "25px", height: "25px", borderRadius: "50%" }}>
-                      <b>
-                        {notificationMessages.filter(messageData => messageData.room == room).length}
-                      </b>
-                    </span>}
-                </ListGroup.Item>
-              )
-            })}
-          </ListGroup>
-        </Modal.Body>
+        <Tabs
+          defaultActiveKey="users"
+          id="noanim-tab-example"
+          className="mb-3"
+        >
+          <Tab eventKey="users" title="Users">
+            <ListGroup variant="flush">
+              {usersObject && Object.keys(usersObject).map((userObj, index) => {
+                return (
+                  <ListGroup.Item key={index} action className="room-list-item d-flex justify-content-between align-items-center" name={`${userObj}`}>
+                    {usersObject[`${userObj}`].username}
+                  </ListGroup.Item>
+                )
+              })}
+            </ListGroup>
+          </Tab>
+          <Tab eventKey="rooms" title="Groups">
+            <Modal.Body className="p-0">
+              <ListGroup variant="flush">
+                {CHATROOMS.map((room, index) => {
+                  return (
+                    <ListGroup.Item key={index} action className="room-list-item d-flex justify-content-between align-items-center" name={room} onClick={handleSettingRoom}>
+                      {room}
+                      {((notificationMessages.length > 0) && (notificationMessages.filter(messageData => messageData.room == room).length > 0)) &&
+                        <span className=" bg-danger notification-number-div d-flex justify-content-center align-items-center text-white" style={{ fontSize: "10px", width: "25px", height: "25px", borderRadius: "50%" }}>
+                          <b>
+                            {notificationMessages.filter(messageData => messageData.room == room).length}
+                          </b>
+                        </span>}
+                    </ListGroup.Item>
+                  )
+                })}
+              </ListGroup>
+            </Modal.Body>
+          </Tab>
+        </Tabs>
         <Modal.Footer>
           <Button variant="secondary" className='btn-sm' onClick={handleClose}>
             Close
