@@ -75,7 +75,7 @@ function App() {
   })
 
   socket.on("disconnect", () => {
-    setConnected(false)
+    window.location.reload();
   })
 
   useEffect(() => {
@@ -90,6 +90,10 @@ function App() {
     socket.on("user_disconnected", (data) => {
       setPrivateNotificationMessages((messages) => {
         return messages.filter(message => message.from != data.toString());
+      })
+      setCurrentRoom((room) => {
+        if(room == data) return ""
+        return room;
       })
     })
   }, [socket])
