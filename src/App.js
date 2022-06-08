@@ -33,11 +33,11 @@ function App() {
   const [privateNotificationMessages, setPrivateNotificationMessages] = useState([]);
 
   const handleClose = () => {
-    setShowModal({...showModal, show: false});
+    setShowModal({ ...showModal, show: false });
   }
 
   const handleShow = (e) => {
-    setShowModal({messageGroup: e.target.getAttribute("name"), show: true})
+    setShowModal({ messageGroup: e.target.getAttribute("name"), show: true })
   }
 
   const handleJoinRoom = async (currentRoom) => {
@@ -60,6 +60,11 @@ function App() {
     if (notificationMessages.length > 0) {
       setNotificationMessages(notificationMessages.filter(messageData => messageData.room != e.target.getAttribute('name')))
     }
+    handleClose();
+  }
+
+  const handleSettingPrivateRoom = (e) => {
+    setCurrentRoom(e.target.getAttribute('name'));
     handleClose();
   }
 
@@ -104,6 +109,9 @@ function App() {
               setCurrentRoom={setCurrentRoom}
               notificationMessages={notificationMessages}
               setNotificationMessages={setNotificationMessages}
+              privateMessagesObject={privateMessagesObject}
+              setPrivateMessagesObject={setPrivateMessagesObject}
+              usersObject={usersObject}
             />
             {showMessagesDiv &&
               <ChatForm
@@ -113,6 +121,9 @@ function App() {
                 userDetails={userDetails}
                 setUserDetails={setUserDetails}
                 currentRoom={currentRoom}
+                usersObject={usersObject}
+                privateMessagesObject={privateMessagesObject}
+                setPrivateMessagesObject={setPrivateMessagesObject}
               />}
           </>
         }
@@ -128,7 +139,7 @@ function App() {
             <ListGroup variant="flush">
               {usersObject && Object.keys(usersObject).map((userObj, index) => {
                 return (
-                  <ListGroup.Item key={index} action className="room-list-item d-flex justify-content-between align-items-center" name={`${userObj}`}>
+                  <ListGroup.Item key={index} action className="room-list-item d-flex justify-content-between align-items-center" name={`${userObj}`} onClick={handleSettingPrivateRoom}>
                     {usersObject[`${userObj}`].username}
                   </ListGroup.Item>
                 )
