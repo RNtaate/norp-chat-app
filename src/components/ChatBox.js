@@ -2,7 +2,7 @@ import React from 'react'
 import MessageCard from './MessageCard';
 import ScrollToBottom from 'react-scroll-to-bottom';
 
-const ChatBox = ({messageObject, currentRoom}) => {
+const ChatBox = ({messageObject, currentRoom, userDetails}) => {
   return (
     <ScrollToBottom scrollViewClassName='display-messages-div  overflow-auto px-3 mb-2'>
       {messageObject[`${currentRoom}`] ?
