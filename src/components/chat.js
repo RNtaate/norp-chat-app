@@ -3,6 +3,7 @@ import { Form, Button } from "react-bootstrap";
 import MessageCard from './MessageCard';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import getCurrentTime, {CHATROOMS} from '../HelperMethods';
+import ChatBox from './ChatBox';
 
 
 const Chat = ({ 
@@ -19,7 +20,10 @@ const Chat = ({
   currentRoom,
   setCurrentRoom,
   notificationMessages,
-  setNotificationMessages
+  setNotificationMessages,
+  privateMessagesObject,
+  setPrivateMessagesObject,
+  usersObject
 }) => {
 
   const roomValue = useRef();
@@ -81,6 +85,14 @@ const Chat = ({
       }
     })
 
+    socket.on("receive_private_message", (messageData) => {
+      setPrivateMessagesObject((obj) => {
+        let messageDataArray = obj[`${messageData.from}`] ? [...obj[`${messageData.from}`], messageData] : [messageData]
+
+        return {...obj, [`${messageData.from}`] : messageDataArray}
+      })
+    })
+
     socket.on("welcome_message", (messageData) => {
       setMessageList([...messageList, messageData]);
       setMessageObject((obj) => {
@@ -111,15 +123,10 @@ const Chat = ({
         </div> :
         
         <div className='chat-form-div d-flex flex-column'>
-            <ScrollToBottom scrollViewClassName='display-messages-div  overflow-auto px-3 mb-2'>
-              {messageObject[`${currentRoom}`] ?
-                messageObject[`${currentRoom}`].map((messageObj, index) => {
-                  return (
-                    <MessageCard key={index} messageObj = {messageObj} username={userDetails.username}/>
-                  )
-                }) : ""
-              }
-            </ScrollToBottom>
+            {usersObject && usersObject[`${currentRoom}`] ? 
+              <ChatBox messageObject={privateMessagesObject} currentRoom={currentRoom} userDetails={userDetails}/> :
+              <ChatBox messageObject={messageObject} currentRoom={currentRoom} userDetails={userDetails}/>
+            }
         </div>
       }
     </div>
