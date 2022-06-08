@@ -13,7 +13,6 @@ const socket = io(SOCKETLINK);
 function App() {
   const [connected, setConnected] = useState(false);
   const [currentUsername, setCurrentUsername] = useState("");
-  const [messageList, setMessageList] = useState([])
   const [userDetails, setUserDetails] = useState({
     username: null,
     room: null
@@ -119,8 +118,6 @@ function App() {
             {showMessagesDiv &&
               <ChatForm
                 socket={socket}
-                messageList={messageList}
-                setMessageList={setMessageList}
                 userDetails={userDetails}
                 setUserDetails={setUserDetails}
                 currentRoom={currentRoom}
