@@ -27,7 +27,7 @@ const NavBar = ({
           </div>}
       </nav>
       {currentUsername &&
-        <span className='text-dark px-2 d-flex bg-light align-items-center'>
+        <span className='text-dark px-2 d-flex bg-light align-items-center py-1'>
           {usersObject && usersObject[`${currentRoom}`] ? 
             <small>{usersObject[`${currentRoom}`].username} <b>(Private Message)</b></small> :
             <small>{currentRoom} <b>(Room / Group)</b></small>
