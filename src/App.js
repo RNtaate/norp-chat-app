@@ -4,12 +4,11 @@ import { io } from "socket.io-client";
 import Chat from "./components/chat";
 import ChatForm from './components/chatForm';
 import { Modal, Button, ListGroup, Tabs, Tab } from "react-bootstrap/"
-import getCurrentTime, { CHATROOMS } from "./HelperMethods";
+import getCurrentTime, { CHATROOMS, SOCKETLINK } from "./HelperMethods";
 import NavBar from './components/NavBar';
 import { Puff } from "react-loader-spinner"
 
-// const socket = io("https://enigmatic-taiga-99914.herokuapp.com/");
-const socket = io("http://192.168.1.191:3001")
+const socket = io(SOCKETLINK);
 
 function App() {
   const [connected, setConnected] = useState(false);
