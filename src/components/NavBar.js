@@ -5,14 +5,17 @@ const NavBar = ({
   currentUsername,
   handleShow,
   notificationMessages,
-  privateNotificationMessages }) => {
+  privateNotificationMessages,
+  currentRoom,
+  usersObject
+}) => {
   return (
     <header className='bg-secondary w-100 d-flex flex-column justify-content-between position-fixed top-0'>
       <nav className='d-flex justify-content-between align-items-center w-100 px-2 py-1'>
         <h1 className="chat-heading text-light py-2 m-0">Norp~Chat~App</h1>
         {currentUsername &&
           <div className="nav-icon-div">
-            <span className='me-3 position-relative' data-bs-toggle="tooltip" title='Chat Rooms' onClick={handleShow}>
+            <span className='me-4 position-relative' data-bs-toggle="tooltip" title='Chat Rooms' onClick={handleShow}>
               <i className="fa fa-users" aria-hidden="true" name="group"></i>
               {notificationMessages.length > 0 && <span className="position-absolute top-0 start-0 translate-middle bg-danger notification-number-div d-flex justify-content-center align-items-center" style={{ fontSize: "10px", width: "25px", height: "25px", borderRadius: "50%", pointerEvents: "none" }}><b>{notificationMessages.length}</b></span>}
             </span>
@@ -25,8 +28,13 @@ const NavBar = ({
       </nav>
       {currentUsername &&
         <span className='text-dark px-2 d-flex bg-light align-items-center'>
-          <div className='live-div me-2'></div>
-          <small className='me-2'>{currentUsername}</small>
+          {usersObject && usersObject[`${currentRoom}`] ? 
+            <small>{usersObject[`${currentRoom}`].username} <b>(Private Message)</b></small> :
+            <small>{currentRoom} <b>(Room / Group)</b></small>
+          }
+          
+          <small className='ms-auto'>{currentUsername} <b>(You)</b></small>
+          <div className='live-div ms-2'></div>
         </span>
       }
     </header>
