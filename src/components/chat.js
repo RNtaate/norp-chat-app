@@ -21,7 +21,9 @@ const Chat = ({
   setNotificationMessages,
   privateMessagesObject,
   setPrivateMessagesObject,
-  usersObject
+  usersObject,
+  privateNotificationMessages,
+  setPrivateNotificationMessages
 }) => {
 
   const roomValue = useRef();
@@ -87,6 +89,11 @@ const Chat = ({
 
         return {...obj, [`${messageData.from}`] : messageDataArray}
       })
+      if(messageData.from != roomValue.current) {
+        setPrivateNotificationMessages((arr) => {
+          return [...arr, messageData]
+        })
+      }
     })
 
     socket.on("welcome_message", (messageData) => {
