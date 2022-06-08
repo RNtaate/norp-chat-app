@@ -97,8 +97,6 @@ function App() {
             <Chat
               socket={socket}
               setCurrentUsername={setCurrentUsername}
-              messageList={messageList}
-              setMessageList={setMessageList}
               userDetails={userDetails}
               setUserDetails={setUserDetails}
               showMessagesDiv={showMessagesDiv}

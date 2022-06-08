@@ -9,8 +9,6 @@ import ChatBox from './ChatBox';
 const Chat = ({ 
   socket,
   setCurrentUsername,
-  messageList,
-  setMessageList,
   userDetails,
   setUserDetails,
   showMessagesDiv,
@@ -62,7 +60,6 @@ const Chat = ({
 
   useEffect(() => {
     socket.on("user_joined_message", (messageData) => {
-      setMessageList([...messageList, messageData])
       setMessageObject((obj) => {
         return {...obj, [`${messageData.room}`] : [...obj[`${messageData.room}`], messageData]}
       })
@@ -74,7 +71,6 @@ const Chat = ({
     })
 
     socket.on("receive_message", (messageData) => {
-      setMessageList([...messageList, messageData]);
       setMessageObject((obj) => {
         return {...obj, [`${messageData.room}`] : [...obj[`${messageData.room}`], messageData]}
       })
@@ -94,7 +90,6 @@ const Chat = ({
     })
 
     socket.on("welcome_message", (messageData) => {
-      setMessageList([...messageList, messageData]);
       setMessageObject((obj) => {
         return { ...obj, [`${messageData.room}`] : [messageData]}
       })
