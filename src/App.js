@@ -29,8 +29,10 @@ function App() {
   const [notificationMessages, setNotificationMessages] = useState([]);
 
   const [usersObject, setUsersObject] = useState(null);
+  const [privateMessagesObject, setPrivateMessagesObject] = useState({});
+  const [privateNotificationMessages, setPrivateNotificationMessages] = useState([]);
 
-  const handleClose = (e) => {
+  const handleClose = () => {
     setShowModal({...showModal, show: false});
   }
 
