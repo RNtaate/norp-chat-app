@@ -64,7 +64,7 @@ function App() {
 
   const handleSettingPrivateRoom = (e) => {
     setCurrentRoom(e.target.getAttribute('name'));
-    if(privateNotificationMessages.length > 0) {
+    if (privateNotificationMessages.length > 0) {
       setPrivateNotificationMessages(privateNotificationMessages.filter(messageData => messageData.from != e.target.getAttribute("name")))
     }
     handleClose();
@@ -86,12 +86,18 @@ function App() {
       })
       console.log("This is the usersObject", usersObject);
     })
+
+    socket.on("user_disconnected", (data) => {
+      setPrivateNotificationMessages((messages) => {
+        return messages.filter(message => message.from != data.toString());
+      })
+    })
   }, [socket])
 
   return (
     <main className="App d-flex flex-column align-items-center justify-content-center position-relative">
       <section className='chat-app-wrapper-section d-flex flex-column align-items-center justify-content-center w-100 overflow-hidden'>
-        <NavBar currentUsername={currentUsername} handleShow={handleShow} notificationMessages={notificationMessages} privateNotificationMessages={privateNotificationMessages} />
+        <NavBar currentUsername={currentUsername} handleShow={handleShow} notificationMessages={notificationMessages} privateNotificationMessages={privateNotificationMessages} currentRoom={currentRoom} usersObject={usersObject} />
 
         {!connected ?
           <Puff color="grey" width="100" height="100" /> :
@@ -142,11 +148,11 @@ function App() {
                   <ListGroup.Item key={index} action className="room-list-item d-flex justify-content-between align-items-center" name={`${userObj}`} onClick={handleSettingPrivateRoom}>
                     {usersObject[`${userObj}`].username}
                     {((privateNotificationMessages.length > 0) && (privateNotificationMessages.filter(messageData => messageData.from == userObj).length > 0)) &&
-                        <span className=" bg-danger notification-number-div d-flex justify-content-center align-items-center text-white" style={{ fontSize: "10px", width: "25px", height: "25px", borderRadius: "50%" }}>
-                          <b>
-                            {privateNotificationMessages.filter(messageData => messageData.from == userObj).length}
-                          </b>
-                        </span>}
+                      <span className=" bg-danger notification-number-div d-flex justify-content-center align-items-center text-white" style={{ fontSize: "10px", width: "25px", height: "25px", borderRadius: "50%" }}>
+                        <b>
+                          {privateNotificationMessages.filter(messageData => messageData.from == userObj).length}
+                        </b>
+                      </span>}
                   </ListGroup.Item>
                 )
               })}
