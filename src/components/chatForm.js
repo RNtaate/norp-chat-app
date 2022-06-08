@@ -28,6 +28,7 @@ const ChatForm = ({
   
           return {...obj, [`${messageData.to}`] : messageDataArray}
         })
+        setMessage("")
         e.target.reset();
       }
     }catch(err) {
@@ -42,6 +43,7 @@ const ChatForm = ({
       if (message !== "") {
         await socket.emit("send_message", messageData );
         console.log("Your message has been sent successfully");
+        setMessage("")
         e.target.reset();
       }
     } catch (err) {
