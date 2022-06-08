@@ -8,7 +8,8 @@ import getCurrentTime, { CHATROOMS } from "./HelperMethods";
 import NavBar from './components/NavBar';
 import { Puff } from "react-loader-spinner"
 
-const socket = io("https://enigmatic-taiga-99914.herokuapp.com/");
+// const socket = io("https://enigmatic-taiga-99914.herokuapp.com/");
+const socket = io("http://192.168.1.191:3001")
 
 function App() {
   const [connected, setConnected] = useState(false);
@@ -19,7 +20,10 @@ function App() {
     room: null
   })
   const [showMessagesDiv, setShowMessagesDiv] = useState(false);
-  const [show, setShow] = useState(false)
+  const [showModal, setShowModal] = useState({
+    messageGroup: "",
+    show: false
+  })
 
   const [messageObject, setMessageObject] = useState({})
   const [currentRoom, setCurrentRoom] = useState("");
@@ -27,12 +31,12 @@ function App() {
 
   const [usersObject, setUsersObject] = useState(null);
 
-  const handleClose = () => {
-    setShow(false);
+  const handleClose = (e) => {
+    setShowModal({...showModal, show: false});
   }
 
-  const handleShow = () => {
-    setShow(true);
+  const handleShow = (e) => {
+    setShowModal({messageGroup: e.target.getAttribute("name"), show: true})
   }
 
   const handleJoinRoom = async (currentRoom) => {
@@ -113,9 +117,9 @@ function App() {
         }
       </section>
 
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={showModal.show} onHide={handleClose}>
         <Tabs
-          defaultActiveKey="users"
+          defaultActiveKey={showModal.messageGroup == "group" ? "rooms" : "users"}
           id="noanim-tab-example"
           className="mb-3"
         >

@@ -8,10 +8,10 @@ const NavBar = ({ currentUsername, handleShow, notificationMessages }) => {
         <h1 className="chat-heading text-light py-2 m-0">Norp~Chat~App</h1>
         {currentUsername &&
           <div className="nav-icon-div">
-            <span className='me-3' data-bs-toggle="tooltip" title='Chat Rooms'><i className="fa fa-users" aria-hidden="true" onClick={handleShow}></i></span>
+            <span className='me-3' data-bs-toggle="tooltip" title='Chat Rooms'><i className="fa fa-users" aria-hidden="true" name="group" onClick={handleShow}></i></span>
 
             <span className='position-relative' data-bs-toggle="tooltip" title='Notifications' onClick={handleShow}>
-              <i className="fa fa-envelope" aria-hidden="true"></i>
+              <i className="fa fa-envelope" aria-hidden="true" name="private"></i>
               {notificationMessages.length > 0 && <span className="position-absolute top-0 start-0 translate-middle bg-danger notification-number-div d-flex justify-content-center align-items-center" style={{fontSize: "10px", width: "25px", height: "25px", borderRadius: "50%"}}><b>{notificationMessages.length}</b></span>}
             </span>
           </div>}
