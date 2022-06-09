@@ -65,12 +65,49 @@ header {
   max-height: 100vh;
   overflow-y: scroll;
   overflow-x: hidden;
-  padding: 90px 0 40px 0;
+  padding: 100px 0 50px 0;
 }
 
 .message-details-p {
   border-radius: 10px;
   font-size: 15px;
+  position: relative;
+}
+
+.message-details-p.received {
+  background-color: #00b83D;
+}
+
+.message-details-p.sent {
+  background-color: #1F46B1;  
+}
+
+.message-details-p::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  z-index: -1;
+  border-radius: 3px;
+}
+
+.message-details-p.received::after {
+  left: -10px;
+  border-top: #00b83D;
+  border-left: transparent;
+  border-right: #00b83D;
+  border-bottom: transparent;
+  border-width: 10px;
+  border-style: solid;
+}
+
+.message-details-p.sent::after {
+  right: -10px;
+  border-top: #1F46B1;
+  border-left: #1F46B1;
+  border-right: transparent;
+  border-bottom: transparent;
+  border-width: 10px;
+  border-style: solid;
 }
 
 .message-meta-div {
