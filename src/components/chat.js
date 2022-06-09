@@ -3,6 +3,7 @@ import { Form, Button } from "react-bootstrap";
 import { Puff } from "react-loader-spinner";
 import getCurrentTime, { CHATROOMS } from '../HelperMethods';
 import ChatBox from './ChatBox';
+import Loader from './Loader';
 
 
 const Chat = ({
@@ -129,10 +130,7 @@ const Chat = ({
               <ChatBox messageObject={privateMessagesObject} currentRoom={currentRoom} userDetails={userDetails} /> :
               <ChatBox messageObject={messageObject} currentRoom={currentRoom} userDetails={userDetails} />)
             :
-            <div className="d-flex flex-column align-items-center">
-              <Puff color="grey" width="50" height="50"/>
-              <small className='mt-3 px-3 text-center'>oops! I think your friend left. Please select a different user or group / room</small>
-            </div> 
+            <Loader color={"grey"} dimensions={"50"} message={"oops! I think this User left. Please select another user or a group"}/> 
           }
         </div>
       }
