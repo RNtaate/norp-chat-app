@@ -110,9 +110,9 @@ const Chat = ({
         <div className="join-chat-div px-4">
           <h6 className='ps-2 text-muted'>Join A Chat Room</h6>
           <Form onSubmit={handleJoinRoom}>
-            <input type="text" autoComplete='false' placeholder='Enter your username' name="username" onChange={userDetailsChange} className='w-100 mb-3 p-2 chat-message-input' />
+            <input type="text" autoComplete='false' placeholder='John ...' name="username" onChange={userDetailsChange} className='w-100 mb-3 p-2 chat-message-input' required/>
 
-            <select className="chat-rooms-select w-100 mb-3 p-2 chat-message-input" name='room' onChange={userDetailsChange}>
+            <select className="chat-rooms-select w-100 mb-3 p-2 chat-message-input" name='room' onChange={userDetailsChange} required>
               <option value="">Select a chat room</option>
               {CHATROOMS.map((room, index) => {
                 return (
