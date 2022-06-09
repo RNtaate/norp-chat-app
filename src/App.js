@@ -7,6 +7,7 @@ import { Modal, Button, ListGroup, Tabs, Tab } from "react-bootstrap/"
 import getCurrentTime, { CHATROOMS, SOCKETLINK } from "./HelperMethods";
 import NavBar from './components/NavBar';
 import { Puff } from "react-loader-spinner"
+import Loader from './components/Loader';
 
 const socket = io(SOCKETLINK);
 
@@ -104,7 +105,7 @@ function App() {
         <NavBar currentUsername={currentUsername} handleShow={handleShow} notificationMessages={notificationMessages} privateNotificationMessages={privateNotificationMessages} currentRoom={currentRoom} usersObject={usersObject} />
 
         {!connected ?
-          <Puff color="grey" width="100" height="100" /> :
+          <Loader color={"grey"} dimensions={"100"} message={"Connecting . . ."}/> :
           <>
             <Chat
               socket={socket}
@@ -145,9 +146,12 @@ function App() {
           id="noanim-tab-example"
           className="mb-3"
         >
-          <Tab eventKey="users" title="Users">
+          <Tab eventKey="users" title="Active Users">
             <ListGroup variant="flush">
-              {usersObject && Object.keys(usersObject).map((userObj, index) => {
+              {usersObject && 
+              ((Object.keys(usersObject))
+              .filter( key => key != socket.id))
+              .map((userObj, index) => {
                 return (
                   <ListGroup.Item key={index} action className="room-list-item d-flex justify-content-between align-items-center" name={`${userObj}`} onClick={handleSettingPrivateRoom}>
                     {usersObject[`${userObj}`].username}
