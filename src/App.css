@@ -52,6 +52,42 @@ header {
   color: #444;
 }
 
+.notification-number-div,
+.notification-number-rooms-div {
+  font-size: 10px;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0.5);
+}
+
+.notification-number-div {
+  animation: pulse 2000ms cubic-bezier(0,1,1,0) infinite;
+}
+
+.notification-number-rooms-div {
+  animation: roomsPulse 1500ms cubic-bezier(0,1,1,0) infinite;
+}
+
+@keyframes pulse  {
+  50% {
+    transform: translate(-50%, -50%) scale(1.5);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+}
+
+@keyframes roomsPulse {
+  50% {
+    transform: translate(-50%, -50%) scale(1.5);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+}
+
 .live-div {
   height: 10px;
   width: 10px;
