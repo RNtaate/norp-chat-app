@@ -35,10 +35,11 @@ const Chat = ({
 
   const handleJoinRoom = async (e) => {
     e.preventDefault();
+    const usernameMatch = /[\w]{1,12}/
     const { username, room } = userDetails;
-    const connectionMade = false;
+
     try {
-      if (username && room) {
+      if ((username.match(usernameMatch)) && room) {
         await socket.emit("join_room", { ...userDetails, time: getCurrentTime() })
         setCurrentUsername(username)
         setCurrentRoom(room);
@@ -110,7 +111,7 @@ const Chat = ({
         <div className="join-chat-div px-4">
           <h6 className='ps-2 text-muted'>Join A Chat Room</h6>
           <Form onSubmit={handleJoinRoom}>
-            <input type="text" autoComplete='false' placeholder='John ...' name="username" onChange={userDetailsChange} className='w-100 mb-3 p-2 chat-message-input' required/>
+            <input type="text" autoComplete='false' placeholder='John ...' name="username" onChange={userDetailsChange} className='w-100 mb-3 p-2 chat-message-input' pattern="[\w]{1,12}" title='Name should not be above 12 characters' required/>
 
             <select className="chat-rooms-select w-100 mb-3 p-2 chat-message-input" name='room' onChange={userDetailsChange} required>
               <option value="">Select a chat room</option>

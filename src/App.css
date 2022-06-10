@@ -108,6 +108,7 @@ header {
   border-radius: 10px;
   font-size: 15px;
   position: relative;
+  word-wrap: break-word;
 }
 
 .message-details-p.received {
