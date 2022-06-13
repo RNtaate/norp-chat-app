@@ -17,7 +17,7 @@
 > - Validation and display of error messages.
 
 ### Screenshots
-- *__Coming Soon__*
+![](/public/screenshot.gif)
 
 ##  🔧 Built with
 
